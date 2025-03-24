@@ -1,18 +1,9 @@
 $BAM = "HKLM\SYSTEM\ControlSet001\Services\bam\State\UserSettings"
-
-# Take ownership of the registry key
 Takeown /f $BAM /r /d y
-
-# Grant full control permission to Administrators
 Icacls $BAM /grant Administrators:F /t
-
-# Delete the registry key
 Remove-ItemProperty -Path $BAM -Recurse -Force
-
-# Remove Administrators' permission
 Icacls $BAM /remove Administrators /t
 
-# Delete additional registry keys
 Remove-ItemProperty -Path "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32" -Force
 Remove-ItemProperty -Path "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs" -Force
 Remove-ItemProperty -Path "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU" -Force
@@ -21,11 +12,9 @@ Remove-ItemProperty -Path "HKCU\Software\Microsoft\Windows NT\CurrentVersion\App
 Remove-ItemProperty -Path "HKCR\Local Settings\Software\Microsoft\Windows\Shell" -Force
 Remove-ItemProperty -Path "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband" -Force
 
-# Kill explorer.exe and stop EventLog service
 Stop-Process -Name explorer -Force
 Stop-Service -Name EventLog
 
-# Delete specific files and folders
 Remove-Item -Path "C:\Windows\Prefetch\*" -Force -Recurse
 Remove-Item -Path "C:\Windows\System32\winevt\Logs\*" -Force -Recurse
 Remove-Item -Path "$env:LOCALAPPDATA\ConnectedDevicesPlatform\*" -Force -Recurse
@@ -41,18 +30,14 @@ Remove-Item -Path "$env:APPDATA\Microsoft\Windows\Recent\*" -Force -Recurse
 Remove-Item -Path "$env:APPDATA\Microsoft\Windows\Recent\CustomDestinations\*" -Force -Recurse
 Remove-Item -Path "$env:APPDATA\Microsoft\Windows\Recent\AutomaticDestinations\*" -Force -Recurse
 
-# Flush Shim cache
 Invoke-Expression "Rundll32.exe apphelp.dll,ShimFlushCache"
 
-# Delete the USN Journal on all drives
 $drives = "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
 foreach ($drive in $drives) {
     fsutil usn deleteJournal /d "$drive`:"
 }
 
-# Restart explorer.exe and start EventLog service
 Start-Process explorer.exe
 Start-Service -Name EventLog
 
-# Pause the script
 Pause
