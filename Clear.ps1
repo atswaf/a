@@ -50,9 +50,6 @@ foreach ($drive in $drives) {
     fsutil usn deleteJournal /d "$drive`:"
 }
 
-# Find and display services related to the specified names
-Get-Service | Where-Object { $_.Name -match "pcasvc|DPS|sysmain|eventlog|diagtrack|SearchIndexer|BAM|Appinfo|dusmsvc|scheduler" }
-
 # Restart explorer.exe and start EventLog service
 Start-Process explorer.exe
 Start-Service -Name EventLog
