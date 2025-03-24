@@ -1,7 +1,7 @@
 $BAM = "HKLM\SYSTEM\ControlSet001\Services\bam\State\UserSettings"
 Takeown /f $BAM /r /d y
 Icacls $BAM /grant Administrators:F /t
-Remove-ItemProperty -Path $BAM -Recurse -Force
+Remove-Item -Path $BAM -Recurse -Force
 Icacls $BAM /remove Administrators /t
 
 Remove-ItemProperty -Path "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32" -Force
