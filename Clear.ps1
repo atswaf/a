@@ -47,7 +47,7 @@ Invoke-Expression "Rundll32.exe apphelp.dll,ShimFlushCache"
 # Delete the USN Journal on all drives
 $drives = "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
 foreach ($drive in $drives) {
-    fsutil usn deleteJournal /d "$drive:`"
+    fsutil usn deleteJournal /d "$drive`:"
 }
 
 # Find and display services related to the specified names
